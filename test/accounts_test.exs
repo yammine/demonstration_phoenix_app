@@ -9,14 +9,33 @@ defmodule Example.AccountsTest do
   @update_attrs %{email: "some updated email"}
   @invalid_attrs %{email: nil}
 
-  def fixture(:user, attrs \\ @create_attrs) do
-    {:ok, user} = Accounts.create_user(attrs)
+  def fixture(:user) do
+    {:ok, user} = Accounts.create_user(@create_attrs)
     user
+  end
+  def fixture(:potato, %User{} = user) do
+    {:ok, potato} = Accounts.create_potato(user, @create_potato_attrs)
+    potato
   end
 
   test "list_users/1 returns all users" do
     user = fixture(:user)
     assert Accounts.list_users() == [user]
+  end
+
+  test "get_potato!/1 returns the potato with given id" do
+    user = fixture(:user)
+    potato = fixture(:potato, user)
+    assert Accounts.get_potato!(potato.id) == potato
+  end
+
+  test "get_potato!/2 returns the potato with given id & associated user struct preloaded" do
+    user = fixture(:user)
+    potato = fixture(:potato, user)
+    fetched_potato = Accounts.get_potato!(potato.id, preload_user: true)
+
+    assert fetched_potato.id == potato.id
+    assert fetched_potato.user == user
   end
 
   test "get_user! returns the user with given id" do

@@ -9,6 +9,26 @@ defmodule Example.Accounts do
   alias Example.Accounts.{User, Potato}
 
   @doc """
+  Get a Potato
+  """
+  def get_potato!(id, opts \\ []) do
+    base_query = from p in Potato,
+      where: p.id == ^id
+    query = build_potato_query(opts, base_query)
+
+    Repo.one!(query)
+  end
+
+  defp build_potato_query([], query), do: query
+  # Currently only supporting one option, but this is a demonstration on how you can compose many queries with ecto
+  defp build_potato_query([{:preload_user, true}|tail], query) do
+    new_query = from p in query,
+      preload: [:user]
+
+    build_potato_query(tail, new_query)
+  end
+
+  @doc """
   Create a Potato and associate it with an existing user
   """
   def create_potato(user_struct_or_id, attrs \\ %{})
