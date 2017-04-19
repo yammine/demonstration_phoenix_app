@@ -3,8 +3,8 @@ defmodule Example.Repo.Migrations.CreateExample.Accounts.Potato do
 
   def change do
     create table(:accounts_potatoes) do
-      add :type, :string
-      add :user_id, references(:accounts_users, on_delete: :nothing)
+      add :type, :string, null: false
+      add :user_id, references(:accounts_users, on_delete: :nothing), null: false
 
       timestamps()
     end

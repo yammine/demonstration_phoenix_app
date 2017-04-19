@@ -9,6 +9,25 @@ defmodule Example.Accounts do
   alias Example.Accounts.{User, Potato}
 
   @doc """
+  Create a Potato and associate it with an existing user
+  """
+  def create_potato(user_struct_or_id, attrs \\ %{})
+  def create_potato(user_id, attrs) when is_integer(user_id) do
+    get_user!(user_id)
+    |> create_potato(attrs)
+  end
+  def create_potato(%User{} = user, attrs) do
+    Ecto.build_assoc(user, :potato)
+    |> potato_changeset(attrs)
+    |> Repo.insert()
+  end
+
+  defp potato_changeset(%Potato{} = potato, attrs) do
+    potato
+    |> cast(attrs, [:type])
+  end
+
+  @doc """
   Returns the list of users.
 
   ## Examples
