@@ -6,7 +6,7 @@ defmodule Example.Accounts do
   import Ecto.{Query, Changeset}, warn: false
   alias Example.Repo
 
-  alias Example.Accounts.User
+  alias Example.Accounts.{User, Potato}
 
   @doc """
   Returns the list of users.
