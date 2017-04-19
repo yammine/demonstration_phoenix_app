@@ -14,9 +14,13 @@ defmodule Example.Web.Router do
   end
 
   scope "/", Example.Web do
-    pipe_through :browser # Use the default browser stack
-
+    pipe_through :browser
     get "/", PageController, :index
+  end
+
+  scope "/", Example.Web do
+    pipe_through :api
+    resources "/users", UserController, except: [:new, :edit]
   end
 
   # Other scopes may use custom stacks.
