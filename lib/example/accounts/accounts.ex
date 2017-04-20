@@ -27,6 +27,7 @@ defmodule Example.Accounts do
 
     build_potato_query(tail, new_query)
   end
+  defp build_potato_query([_|tail], query), do: build_potato_query(tail, query)
 
   @doc """
   Create a Potato and associate it with an existing user
